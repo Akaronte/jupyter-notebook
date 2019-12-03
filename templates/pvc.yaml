@@ -1,0 +1,19 @@
+{{- if .Values.persistence.enabled -}}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "jupyter-notebook.fullname" . }}-pvc
+  labels:
+    app: {{ template "jupyter-notebook.name" . }}
+    chart: {{ template "jupyter-notebook.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  accessModes:
+    - {{ .Values.persistence.accessMode | quote }}
+  persistentVolumeReclaimPolicy: Recycle
+  resources:
+    requests:
+      storage: {{ .Values.persistence.size | quote }}
+  {{ include "jupyter-notebook.storageClass" . }}
+{{- end -}}

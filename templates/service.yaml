@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "jupyter-notebook.fullname" . }}
+  labels:
+{{ include "jupyter-notebook.labels" . | indent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: 8888
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ include "jupyter-notebook.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
